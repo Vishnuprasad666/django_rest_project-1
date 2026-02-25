@@ -152,3 +152,20 @@ class TodoView(ViewSet):
             dser.save()
             return Response(data=dser.data,status=status.HTTP_200_OK)
         return Response(data=dser.errors,status=status.HTTP_400_BAD_REQUEST)
+    def list(self,request):
+        ser=TodoSerializer(Todo.objects.all(),many=True)
+        return Response(data=ser.data,status=status.HTTP_200_OK)
+    def retrieve(self,request,pk=0):
+        ser=TodoSerializer(Todo.objects.get(id=pk))
+        return Response(data=ser.data,status=status.HTTP_200_OK)
+    def update(self,request,pk=0):
+        todo=Todo.objects.get(id=pk)
+        dser=TodoSerializer(data=request.data,instance=todo)
+        if dser.is_valid():
+            dser.save()
+            return Response(data=dser.data,status=status.HTTP_200_OK)
+        return Response(data=dser.errors,status=status.HTTP_400_BAD_REQUEST)
+    def destroy(self,request,pk=0):
+        todo=Todo.objects.get(id=pk)
+        todo.delete()
+        return Response({"data":"Deleted"},status=status.HTTP_200_OK)
