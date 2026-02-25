@@ -125,7 +125,7 @@ class TeacherViewSet(ViewSet):
         if dser.is_valid():
             dser.save()
             return Response(data=dser.data,status=status.HTTP_201_CREATED)
-        return Response(data=dser.data,status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=dser.errors,status=status.HTTP_400_BAD_REQUEST)
     def list(self,request):
         ser=TeacherSerializer(Teacher.objects.all(),many=True)
         return Response(data=ser.data,status=status.HTTP_200_OK)
@@ -139,8 +139,16 @@ class TeacherViewSet(ViewSet):
         if dser.is_valid():
             dser.save()
             return Response(data=dser.data,status=status.HTTP_200_OK)
-        return Response(data=dser.data,status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=dser.errors,status=status.HTTP_400_BAD_REQUEST)
     def destroy(self,request,pk=0):
         teach=Teacher.objects.get(id=pk)
         teach.delete()
         return Response(data={"msg":"Deleted"},status=status.HTTP_200_OK)
+    
+class TodoView(ViewSet):
+    def create(self,request):
+        dser=TodoSerializer(data=request.data)
+        if dser.is_valid():
+            dser.save()
+            return Response(data=dser.data,status=status.HTTP_200_OK)
+        return Response(data=dser.errors,status=status.HTTP_400_BAD_REQUEST)
