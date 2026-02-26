@@ -6,6 +6,8 @@ from api.serializers import *
 from api.models import *
 from rest_framework import status
 from rest_framework.viewsets import ViewSet
+from rest_framework import authentication
+from rest_framework import permissions
 # Create your views here.
 
 users=[
@@ -146,6 +148,11 @@ class TeacherViewSet(ViewSet):
         return Response(data={"msg":"Deleted"},status=status.HTTP_200_OK)
     
 class TodoView(ViewSet):
+    authentication_classes=[authentication.BasicAuthentication]
+    permission_classes=[permissions.IsAuthenticated]
+    # permission_classes=[permissions.AllowAny]
+    # permission_classes=[permissions.IsAdminUser]
+    # permission_classes=[permissions.IsAuthenticatedOrReadOnly]
     def create(self,request):
         dser=TodoSerializer(data=request.data)
         if dser.is_valid():

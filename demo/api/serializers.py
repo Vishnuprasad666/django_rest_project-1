@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from api.models import Teacher,Todo
+from django.contrib.auth.models import User
 
 class AssignmentSerializer(serializers.Serializer):
     title=serializers.CharField()
@@ -22,3 +23,10 @@ class TodoSerializer(serializers.Serializer):
         if len(title_val)<5:
             raise serializers.ValidationError("Title should be atleast 5 characters in length!")
         return super().validate(attrs)
+
+class UserSerializer(serializers.Serializer):
+    class Meta:
+        model=User
+        fields=["username","email","password"]
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
